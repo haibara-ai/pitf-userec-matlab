@@ -2,10 +2,10 @@ function ret = Userec(utf_tensor,user_tag_friend,user_tag_cell,train_user_friend
 
 num_feature = 32;
 regular = 0.00005;
-learn_rate = 0.05;
+learn_rate = 0.005;
 init_mean = 0;
 init_std = 0.01;
-num_iteration = 1000;
+num_iteration = 100;
 num_neg_samples = 10;
 epsion = 0.04;
 num_user = size(utf_tensor,1);
@@ -13,16 +13,16 @@ num_tag = size(utf_tensor,2);
 num_frd = size(utf_tensor,3);
 top_N = 100;
 %% train
-fprintf('train pitf...\n');
-start_t = clock;
-[U,T,F_U,F_T] = TrainPITF(user_tag_friend,num_user,num_tag,num_frd,num_feature,init_mean,init_std,regular,learn_rate,num_iteration,num_neg_samples,epsion);
-disp(['cost time: ',num2str(etime(clock,start_t))]);
-fprintf('train pitf end...\n');
-save ./train_pitf_model.mat U T F_U F_T
-% load('./train_pitf_model.mat','U');
-% load('./train_pitf_model.mat','T');
-% load('./train_pitf_model.mat','F_U');
-% load('./train_pitf_model.mat','F_T');
+% fprintf('train pitf...\n');
+% start_t = clock;
+% [U,T,F_U,F_T] = TrainPITF(user_tag_friend,num_user,num_tag,num_frd,num_feature,init_mean,init_std,regular,learn_rate,num_iteration,num_neg_samples,epsion);
+% disp(['cost time: ',num2str(etime(clock,start_t))]);
+% fprintf('train pitf end...\n');
+% save ./train_pitf_model.mat U T F_U F_T
+load('./train_pitf_model.mat','U');
+load('./train_pitf_model.mat','T');
+load('./train_pitf_model.mat','F_U');
+load('./train_pitf_model.mat','F_T');
 %% predict top friends based on each tag
 fprintf('predict...\n');
 predict_dim = 4;
@@ -69,10 +69,10 @@ ret{5} = map;
             for jj = 1:num_feature
                 temp = temp + U(uid,jj)*F_U(ii,jj) + T(tid,jj)*F_T(ii,jj);
             end
-            predict_frds(i,2) = temp;
+            predict_frds(ii,2) = temp;
         end
         predict_frds(predict_frds(:,1) == 0,:) = [];
-        ret = sortrows(predict_frds,2);
+        ret = sortrows(predict_frds,-2);
     end
 
     function ret = DecellPredictRet(predict_cell)
