@@ -4,8 +4,8 @@ predict_count = size(predict_posts,1)/length(unique(predict_posts(:,1)));
 precision = zeros(predict_count,1);
 recall = zeros(predict_count,1);
 fmeasure = zeros(predict_count,1);
-mrr = zeros(1,1);
-map = zeros(1,1);
+mrr = zeros(predict_count,1);
+map = zeros(predict_count,1);
 
 test_users = unique(test_posts(:,1));
 test_user_count = size(test_users,1);
@@ -25,9 +25,9 @@ for i = 1:test_user_count
         if ~isempty(hit_pos)
             rr = rr + 1 / hit_pos;
         end
-    end
-    map = map + ap / length(test_frds);
-    mrr = mrr + rr / length(test_frds);
+        map(j) = map(j) + ap / length(test_frds);
+        mrr(j) = mrr(j) + rr / length(test_frds);
+    end    
 end
 map = map / test_user_count;
 mrr = mrr / test_user_count;
