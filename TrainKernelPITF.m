@@ -12,7 +12,6 @@ F_U = GetNormMatrix(num_frd,num_feature,init_mean,init_std);
 F_T = GetNormMatrix(num_frd,num_feature,init_mean,init_std);
 
 num_frd_case = size(frd_cases,1);
-num_iteration_neg_samples = num_frd_case * num_neg_samples;
 
 %% train
 for i = 1:num_iteration
@@ -22,26 +21,29 @@ for i = 1:num_iteration
     old_T = T;
     old_FU = F_U;
     old_FT = F_T;
-    for j = 1:num_iteration_neg_samples
-        p = ceil(rand * num_frd_case);
-        uid = frd_cases{p,1};
-        tid = frd_cases{p,2};
-        fid_p = frd_cases{p,3};
-        fid_n = DrawNegSample(num_frd,frd_cases{p,4});
-        Learn(uid,tid,fid_p,fid_n,kernel_type);
+    rand_order = randperm(num_frd_case);
+    for j = 1:num_frd_case        
+        p = rand_order(j);
+        for k = 1:num_neg_samples
+            uid = frd_cases{p,1};
+            tid = frd_cases{p,2};
+            fid_p = frd_cases{p,3};
+            fid_n = DrawNegSample(num_frd,frd_cases{p,4});
+            Learn(uid,tid,fid_p,fid_n,kernel_type);
+        end
     end
     diff = CalcIterationDiff(old_U,old_T,old_FU,old_FT);
     subplot(2,2,1);
-    plot(i,diff(1));
+    plot(i,diff(1),'MarkerSize',10);
     hold on;
     subplot(2,2,2);
-    plot(i,diff(2));
+    plot(i,diff(2),'MarkerSize',10);
     hold on;
     subplot(2,2,3);
-    plot(i,diff(3));
+    plot(i,diff(3),'MarkerSize',10);
     hold on;
     subplot(2,2,4);
-    plot(i,diff(4));
+    plot(i,diff(4),'MarkerSize',10);
     hold on;
     disp(['cost time: ',num2str(etime(clock,start_t))]);
     fprintf('iteration diff: %f,%f,%f,%f\n',diff(1),diff(2),diff(3),diff(4));
