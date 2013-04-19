@@ -4,7 +4,7 @@ regular = 0.00005;
 learn_rate = 0.005;
 init_mean = 0;
 init_std = 0.01;
-num_iteration = 150;
+num_iteration = 100;
 num_neg_samples = 10;
 epsion = 0.01;
 num_user = size(utf_tensor,1);
@@ -20,8 +20,8 @@ disp(['cost time: ',num2str(train_t)]);
 fprintf('train pitf end...\n');
 
 %% predict top friends based on each tag
-model_file = [num2str(month(now)) '_' num2str(day(now)) '_' num2str(hour(now)) '_' num2str(minute(now)) '_pitf_model'];
-save([model_file '.mat'],'U','T','F_U','F_T');
+model_file = [num2str(month(now)) '_' num2str(day(now)) '_' num2str(hour(now)) '_' num2str(minute(now)) '_' num2str(second(now)) '_dim' num2str(num_feature) '_pitf_model'];
+save(['./pitf-data/' model_file '.mat'],'U','T','F_U','F_T');
 fprintf('predict...\n');
 predict_dim = 4;
 test_users = unique(test_user_friend(:,1));
@@ -39,10 +39,9 @@ for i = 1:length(test_users)
     per_user_predict_cell{i,1} = per_tag_predict;
 end
 per_user_predict = DecellPredictRet(per_user_predict_cell);
-% save ./predict_pitf_test.mat
 %% fusion rank
 userec = FusionRankByRRF(test_user_friend,per_user_predict,top_N);
-save([model_file '_predict.mat'],'userec');
+save(['./pitf-data/' model_file '_predict.mat'],'userec');
 fprintf('predict end...\n');
 %% evaluate result
 fprintf('evaluate...\n');
@@ -55,8 +54,8 @@ ret{3} = fmeasure;
 ret{4} = mrr;
 ret{5} = map;
 ret{6} = train_t;
-save([model_file '_evaluate.mat'],'ret');
-saveas(gcf,[model_file '.fig']);
+save(['./pitf-data/' model_file '_evaluate.mat'],'ret');
+saveas(gcf,['./pitf-data/' model_file '.fig']);
 %% sub functions
     function ret = PredictTopFrds(uid,tid)
         predict_frds = zeros(num_frds,2);
