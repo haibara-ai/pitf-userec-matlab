@@ -1,4 +1,4 @@
-function ret = KernelUserec(utf_tensor,train_friend_cases,user_tag_cell,train_user_friend,test_user_friend,num_feature)
+function ret = KernelUserec(utf_size,train_friend_cases,user_tag_cell,train_user_friend,test_user_friend,num_feature)
 
 regular = 0.00005;
 learn_rate = 0.005;
@@ -7,9 +7,9 @@ init_std = 0.01;
 num_iteration = 100;
 num_neg_samples = 1;
 epsion = 0.01;
-num_user = size(utf_tensor,1);
-num_tag = size(utf_tensor,2);
-num_frd = size(utf_tensor,3);
+num_user = utf_size(1);
+num_tag = utf_size(2);
+num_frd = utf_size(3);
 top_N = 100;
 kernel_type = 1;
 %% train
