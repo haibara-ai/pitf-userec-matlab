@@ -1,21 +1,24 @@
-function ret = KernelUserec(utf_size,train_friend_cases,user_tag_cell,train_user_friend,test_user_friend,num_feature)
+function ret = KernelUserec(utf_size,train_friend_cases,user_tag_cell,train_user_friend,test_user_friend,num_feature,kernel_type,varargin)
 
 regular = 0.00005;
 learn_rate = 0.005;
 init_mean = 0;
 init_std = 0.01;
 num_iteration = 100;
-num_neg_samples = 1;
+num_neg_samples = 10;
 epsion = 0.01;
 num_user = utf_size(1);
 num_tag = utf_size(2);
 num_frd = utf_size(3);
 top_N = 100;
-kernel_type = 1;
 %% train
 fprintf('train pitf...\n');
 start_t = clock;
-[U,T,F_U,F_T] = TrainKernelPITF(train_friend_cases,num_user,num_tag,num_frd,num_feature,init_mean,init_std,regular,learn_rate,num_iteration,num_neg_samples,epsion,kernel_type);
+if kernel_type == 1
+    [U,T,F_U,F_T] = TrainKernelPITF(train_friend_cases,num_user,num_tag,num_frd,num_feature,init_mean,init_std,regular,learn_rate,num_iteration,num_neg_samples,epsion,kernel_type);
+else
+    [U,T,F_U,F_T] = TrainKernelPITF(train_friend_cases,num_user,num_tag,num_frd,num_feature,init_mean,init_std,regular,learn_rate,num_iteration,num_neg_samples,epsion,kernel_type,varargin{1});
+end
 train_t = etime(clock,start_t);
 disp(['cost time: ',num2str(train_t)]);
 fprintf('train pitf end...\n');

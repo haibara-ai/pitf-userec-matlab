@@ -24,10 +24,10 @@ for i = 1:num_iteration
     rand_order = randperm(num_frd_case);
     for j = 1:num_frd_case        
         p = rand_order(j);
+        uid = frd_cases{p,1};
+        tid = frd_cases{p,2};
+        fid_p = frd_cases{p,3};        
         for k = 1:num_neg_samples
-            uid = frd_cases{p,1};
-            tid = frd_cases{p,2};
-            fid_p = frd_cases{p,3};
             fid_n = DrawNegSample(num_frd,frd_cases{p,4});
             Learn(uid,tid,fid_p,fid_n,kernel_type);
         end

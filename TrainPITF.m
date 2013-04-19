@@ -20,10 +20,10 @@ for i = 1:num_iteration
     rand_order = randperm(num_frd_case);
     for j = 1:num_frd_case        
         p = rand_order(j);
+        uid = frd_cases{p,1};
+        tid = frd_cases{p,2};
+        fid_p = frd_cases{p,3};        
         for k = 1:num_neg_samples
-            uid = frd_cases{p,1};
-            tid = frd_cases{p,2};
-            fid_p = frd_cases{p,3};
             fid_n = DrawNegSample(num_frd,frd_cases{p,4});
             Learn(uid,tid,fid_p,fid_n);
         end
@@ -59,7 +59,7 @@ hold off;
     function local_score = PredictCaseScore(uid,tid,fid)
         uf_score = 0;
         tf_score = 0;
-        for ii = 1:num_feature
+        parfor ii = 1:num_feature
             uf_score = uf_score + U(uid,ii)*F_U(fid,ii);
             tf_score = tf_score + T(tid,ii)*F_T(fid,ii);
         end
