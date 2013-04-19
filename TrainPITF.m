@@ -28,16 +28,16 @@ for i = 1:num_iteration
     end
     diff = CalcIterationDiff(old_U,old_T,old_FU,old_FT);
     subplot(2,2,1);
-    plot(i,diff(1));
+    plot(i,diff(1),'MarkerSize',8);
     hold on;
     subplot(2,2,2);
-    plot(i,diff(2));
+    plot(i,diff(2),'MarkerSize',8);
     hold on;
     subplot(2,2,3);
-    plot(i,diff(3));
+    plot(i,diff(3),'MarkerSize',8);
     hold on;
     subplot(2,2,4);
-    plot(i,diff(4));
+    plot(i,diff(4),'MarkerSize',8);
     hold on;
     disp(['cost time: ',num2str(etime(clock,start_t))]);
     fprintf('iteration diff: %f,%f,%f,%f\n',diff(1),diff(2),diff(3),diff(4));
