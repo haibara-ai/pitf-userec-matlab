@@ -59,7 +59,7 @@ hold off;
     function local_score = PredictCaseScore(uid,tid,fid)
         uf_score = 0;
         tf_score = 0;
-        parfor ii = 1:num_feature
+        for ii = 1:num_feature
             uf_score = uf_score + U(uid,ii)*F_U(fid,ii);
             tf_score = tf_score + T(tid,ii)*F_T(fid,ii);
         end
