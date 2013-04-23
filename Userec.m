@@ -28,6 +28,7 @@ test_users = unique(test_user_friend(:,1));
 num_frds = size(F_U,1);
 per_user_predict_cell = cell(length(test_users));
 for i = 1:length(test_users)
+    fprintf('user %d/%d\n',i,length(test_users));
     tags = user_tag_cell{test_users(i)};
     per_tag_predict_cell = cell(length(tags),1);
     for j = 1:length(tags)
@@ -36,7 +37,8 @@ for i = 1:length(test_users)
         per_tag_predict_cell{j,1} = [test_users(i)*ones(1,temp_ret_count);tags(j)*ones(1,temp_ret_count);temp_ret']';        
     end
     per_tag_predict = DecellPredictRet(per_tag_predict_cell);
-    per_user_predict_cell{i,1} = per_tag_predict;
+    cur_len = min(size(per_tag_predict,1),top_N);    
+    per_user_predict_cell{i,1} = per_tag_predict(1:cur_len,:);
 end
 per_user_predict = DecellPredictRet(per_user_predict_cell);
 %% fusion rank

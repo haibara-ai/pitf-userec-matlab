@@ -4,7 +4,14 @@ users = unique(user_contact(:,1));
 user_cnt = length(users);
 rand_index = randperm(user_cnt);
 sample_users = users(rand_index(1:sample_user_cnt));
-
+del_flag = zeros(sample_user_cnt,1);
+for i = 1:sample_user_cnt
+    if size(user_tag_cell{sample_users(i)},1) >= 1000
+        del_flag(i,1) = 1;
+    end
+end
+sample_users(logical(del_flag),:) = [];
+sample_user_cnt = length(sample_users);
 sample_user_contact = FiltData(user_contact,1,sample_users);
 sample_contact = unique(sample_user_contact(:,2));
 sample_user_tag_contact = AchieveUserTagFriendByUserFriend(user_tag_contact,sample_user_contact);
